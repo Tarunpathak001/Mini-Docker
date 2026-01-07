@@ -21,8 +21,9 @@ System Calls Used:
 
 import ctypes
 import os
+import sys
 import shutil
-import subprocess
+
 from typing import Optional, Tuple
 
 from mini_docker.utils import get_overlay_paths, libc
@@ -178,7 +179,9 @@ def pivot_root(new_root: str, put_old: str) -> int:
     put_old_bytes = put_old.encode("utf-8")
 
     ret = libc.syscall(
-        SYS_pivot_root, ctypes.c_char_p(new_root_bytes), ctypes.c_char_p(put_old_bytes)
+        SYS_pivot_root,
+        ctypes.c_char_p(new_root_bytes),
+        ctypes.c_char_p(put_old_bytes),
     )
 
     if ret != 0:
@@ -284,7 +287,7 @@ def setup_overlay_filesystem(
             shutil.copytree(rootfs_path, lower, dirs_exist_ok=True)
 
     # Mount overlay filesystem
-    overlay_options = f"lowerdir={lower}," f"upperdir={upper}," f"workdir={work}"
+    overlay_options = f"lowerdir={lower},upperdir={upper},workdir={work}"
 
     mount("overlay", merged, "overlay", 0, overlay_options)
 
@@ -351,8 +354,6 @@ def setup_pivot_root(merged_path: str) -> None:
         mount("devpts", pts_path, "devpts", MS_NOSUID | MS_NOEXEC)
     except FilesystemError:
         pass
-
-
 
     # Create put_old directory
     put_old = os.path.join(merged_path, ".pivot_old")

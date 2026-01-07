@@ -34,7 +34,7 @@ Network Architecture:
     └─────────────────────────────────────────────────────────────┘
 """
 
-import os
+
 import subprocess
 from typing import Optional, Tuple
 
@@ -142,7 +142,16 @@ def create_veth_pair(veth_host: str, veth_container: str) -> None:
     """
     try:
         run_ip_command(
-            ["link", "add", veth_host, "type", "veth", "peer", "name", veth_container]
+            [
+                "link",
+                "add",
+                veth_host,
+                "type",
+                "veth",
+                "peer",
+                "name",
+                veth_container,
+            ]
         )
     except subprocess.CalledProcessError as e:
         raise NetworkError(f"Failed to create veth pair: {e}")
@@ -214,7 +223,16 @@ def setup_nat(subnet: str = BRIDGE_SUBNET) -> None:
         # Rule doesn't exist, add it
         try:
             run_iptables_command(
-                ["-t", "nat", "-A", "POSTROUTING", "-s", subnet, "-j", "MASQUERADE"]
+                [
+                    "-t",
+                    "nat",
+                    "-A",
+                    "POSTROUTING",
+                    "-s",
+                    subnet,
+                    "-j",
+                    "MASQUERADE",
+                ]
             )
         except subprocess.CalledProcessError:
             pass
@@ -251,7 +269,7 @@ def setup_container_networking(
     # Create veth pair names using container ID
     short_id = container_id[:8]
     veth_host = f"veth{short_id}"
-    veth_container = f"eth0"
+    veth_container = "eth0"
 
     # Truncate names to fit Linux limits (15 chars)
     veth_host = veth_host[:15]

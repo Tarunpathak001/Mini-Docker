@@ -11,7 +11,7 @@ Provides:
 
 import os
 import select
-import sys
+
 import threading
 import time
 from datetime import datetime

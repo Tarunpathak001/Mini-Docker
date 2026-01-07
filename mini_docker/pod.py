@@ -234,14 +234,16 @@ class PodManager:
 
     def _start_infra_container(self, config: PodConfig) -> None:
         """Start the infra container that holds shared namespaces."""
-        import subprocess
 
         # Fork a process that just sleeps to hold namespaces
         pid = os.fork()
         if pid == 0:
             # Child process - become the infra container
             try:
-                from mini_docker.namespaces import create_namespaces, sethostname
+                from mini_docker.namespaces import (
+                    create_namespaces,
+                    sethostname,
+                )
 
                 # Create shared namespaces
                 create_namespaces(config.shared_namespaces, hostname=config.hostname)
@@ -292,7 +294,8 @@ class PodManager:
         # Check if pod has running containers
         if config.containers and not force:
             raise PodError(
-                f"Pod has {len(config.containers)} containers. Use --force to remove."
+                f"Pod has {len(config.containers)} containers. "
+                "Use --force to remove."
             )
 
         return delete_pod_config(pod_id)

@@ -19,8 +19,7 @@ For containers, we drop most capabilities to reduce attack surface.
 """
 
 import ctypes
-import os
-import struct
+
 from typing import List, Optional, Set
 
 from mini_docker.utils import libc
@@ -395,7 +394,9 @@ class Capabilities:
     def get_names(self) -> List[str]:
         """Get list of capability names."""
         return [
-            cap_number_to_name(c) for c in sorted(self.caps) if cap_number_to_name(c)
+            cap_number_to_name(c)
+            for c in sorted(self.caps)
+            if cap_number_to_name(c) is not None
         ]
 
     def __contains__(self, cap: str) -> bool:

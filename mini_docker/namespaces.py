@@ -134,7 +134,9 @@ def sethostname(name: str) -> int:
 
 
 def create_namespaces(
-    namespaces: List[str], hostname: Optional[str] = None, rootless: bool = False
+    namespaces: List[str],
+    hostname: Optional[str] = None,
+    rootless: bool = False,
 ) -> int:
     """
     Create multiple namespaces at once.

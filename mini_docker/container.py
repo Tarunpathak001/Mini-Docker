@@ -17,17 +17,14 @@ Container Lifecycle:
 import errno
 import os
 import signal
-import subprocess
 import sys
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
-from mini_docker.capabilities import Capabilities, apply_default_container_caps
+from mini_docker.capabilities import Capabilities
 from mini_docker.cgroups import Cgroup, delete_cgroup
 from mini_docker.filesystem import (
     cleanup_overlay,
     setup_chroot_filesystem,
-    setup_minimal_dev,
-    setup_overlay_filesystem,
     setup_minimal_dev,
     setup_overlay_filesystem,
     setup_pivot_root,
@@ -35,25 +32,17 @@ from mini_docker.filesystem import (
     MS_REC,
     MS_PRIVATE,
 )
-from mini_docker.logger import ContainerLogger, OutputCapture
+from mini_docker.logger import ContainerLogger
 from mini_docker.metadata import (
     ContainerConfig,
     MetadataStore,
-    get_container_log_path,
     load_container_config,
     save_container_config,
     update_container_status,
 )
 from mini_docker.namespaces import (
-    CLONE_NEWIPC,
-    CLONE_NEWNET,
-    CLONE_NEWNS,
-    CLONE_NEWPID,
-    CLONE_NEWUSER,
-    CLONE_NEWUTS,
     create_namespaces,
     enter_all_namespaces,
-    sethostname,
     setup_user_namespace,
 )
 from mini_docker.network import Network, configure_container_network
@@ -345,7 +334,7 @@ class Container:
                                 pass
 
                         signal.signal(signal.SIGTERM, forward_signal)
-                        
+
                         # Wait for child
                         try:
                             _, status = os.waitpid(pid, 0)
@@ -354,15 +343,14 @@ class Container:
                             else:
                                 os._exit(1)
                         except ChildProcessError:
-                             os._exit(0)
-            
+                            os._exit(0)
+
                 # Mark / as private so mount events don't propagate to host
                 # and to ensure we can mount /proc properly in the new root
                 try:
-                     mount(None, "/", None, MS_REC | MS_PRIVATE, None)
+                    mount(None, "/", None, MS_REC | MS_PRIVATE, None)
                 except Exception as e:
-                     print(f"Warning: Failed to make / private: {e}", file=sys.stderr)
-            
+                    print(f"Warning: Failed to make / private: {e}", file=sys.stderr)
 
             # Signal parent we have unshared
             if config.rootless and sync_write is not None:
@@ -416,7 +404,9 @@ class Container:
                 setup_pivot_root(rootfs_to_pivot)
             except Exception as e:
                 # Fallback to chroot
-                print(f"Pivot root failed, falling back to chroot: {e}", file=sys.stderr)
+                print(
+                    f"Pivot root failed, falling back to chroot: {e}", file=sys.stderr
+                )
                 setup_chroot_filesystem(rootfs_to_pivot)
 
             # Configure network inside container
@@ -577,7 +567,7 @@ class Container:
                 self.stop(container_id, timeout=5)
             else:
                 raise ContainerError(
-                    f"Container is running. Stop first or use force=True"
+                    "Container is running. Stop first or use force=True"
                 )
 
         # Wrap cleanup in try/except to ensure all cleanup attempted

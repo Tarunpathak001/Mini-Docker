@@ -16,13 +16,16 @@ Running Tests:
 
 Note:
     Some tests require root privileges to test actual container features.
-    Tests that require root are marked with @pytest.mark.skipif(os.geteuid() != 0).
+    Tests that require root are marked with:
+    @pytest.mark.skipif(os.geteuid() != 0)
 """
 
 import os
 import sys
 
 # Add parent directory to path for imports
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(
+    0, os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+)
 
 __all__ = ["test_basic"]

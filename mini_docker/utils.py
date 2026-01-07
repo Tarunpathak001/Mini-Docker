@@ -46,7 +46,7 @@ import ctypes
 import os
 import random
 import string
-import struct
+
 from typing import Optional, Tuple
 
 # Base paths for Mini-Docker

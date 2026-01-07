@@ -25,7 +25,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from mini_docker.metadata import ContainerConfig, NetworkConfig, ResourceLimits
+from mini_docker.metadata import ContainerConfig, ResourceLimits
 
 
 @dataclass
@@ -436,7 +436,9 @@ class OCIRuntime:
         errors = runtime.validate("/path/to/bundle")
         if not errors:
             config = runtime.load("/path/to/bundle")
-            container_config = runtime.to_container_config(config, "/path/to/bundle")
+            container_config = runtime.to_container_config(
+                config, "/path/to/bundle"
+            )
     """
 
     def validate(self, bundle_path: str) -> List[str]:

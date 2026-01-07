@@ -38,12 +38,15 @@ def create_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="mini-docker",
         description="Mini-Docker: A minimal container runtime built from scratch",
-        epilog="For more information, see: https://github.com/Yumekaz/Mini-Docker",
+        epilog=("For more information, see: https://github.com/Yumekaz/Mini-Docker"),
     )
 
     # Global options
     parser.add_argument(
-        "--version", "-v", action="version", version=f"Mini-Docker {__version__}"
+        "--version",
+        "-v",
+        action="version",
+        version=f"Mini-Docker {__version__}",
     )
     parser.add_argument("--debug", action="store_true", help="Enable debug output")
     parser.add_argument("--quiet", "-q", action="store_true", help="Suppress output")
@@ -59,7 +62,9 @@ def create_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--name", "-n", help="Container name")
     run_parser.add_argument("--hostname", "-H", help="Container hostname")
     run_parser.add_argument(
-        "--no-overlay", action="store_true", help="Use chroot instead of OverlayFS"
+        "--no-overlay",
+        action="store_true",
+        help="Use chroot instead of OverlayFS",
     )
     run_parser.add_argument(
         "--cpu", "-c", type=int, help="CPU limit percentage (1-100)"
@@ -67,7 +72,9 @@ def create_parser() -> argparse.ArgumentParser:
     run_parser.add_argument("--memory", "-m", help="Memory limit (e.g., 100M, 1G)")
     run_parser.add_argument("--pids", type=int, help="Max number of processes")
     run_parser.add_argument(
-        "--pids-limit", type=int, help="Max number of processes (alias for --pids)"
+        "--pids-limit",
+        type=int,
+        help="Max number of processes (alias for --pids)",
     )
     run_parser.add_argument(
         "--env",
@@ -98,7 +105,9 @@ def create_parser() -> argparse.ArgumentParser:
         "--detach", "-d", action="store_true", help="Run container in background"
     )
     run_parser.add_argument(
-        "--rm", action="store_true", help="Automatically remove container when it exits"
+        "--rm",
+        action="store_true",
+        help="Automatically remove container when it exits",
     )
     run_parser.add_argument(
         "--interactive", "-i", action="store_true", help="Keep STDIN open"
@@ -189,7 +198,11 @@ def create_parser() -> argparse.ArgumentParser:
         "container", nargs="+", help="Container ID(s) or name(s)"
     )
     inspect_parser.add_argument(
-        "--format", "-f", choices=["json", "yaml"], default="json", help="Output format"
+        "--format",
+        "-f",
+        choices=["json", "yaml"],
+        default="json",
+        help="Output format",
     )
 
     # =========================================================================
@@ -198,10 +211,17 @@ def create_parser() -> argparse.ArgumentParser:
     stop_parser = subparsers.add_parser("stop", help="Stop a container")
     stop_parser.add_argument("container", nargs="+", help="Container ID(s) or name(s)")
     stop_parser.add_argument(
-        "--time", "-t", type=int, default=10, help="Seconds to wait before SIGKILL"
+        "--time",
+        "-t",
+        type=int,
+        default=10,
+        help="Seconds to wait before SIGKILL",
     )
     stop_parser.add_argument(
-        "--force", "-f", action="store_true", help="Force stop (SIGKILL immediately)"
+        "--force",
+        "-f",
+        action="store_true",
+        help="Force stop (SIGKILL immediately)",
     )
 
     # =========================================================================
@@ -210,7 +230,10 @@ def create_parser() -> argparse.ArgumentParser:
     rm_parser = subparsers.add_parser("rm", help="Remove a container")
     rm_parser.add_argument("container", nargs="+", help="Container ID(s) or name(s)")
     rm_parser.add_argument(
-        "--force", "-f", action="store_true", help="Force removal of running container"
+        "--force",
+        "-f",
+        action="store_true",
+        help="Force removal of running container",
     )
     rm_parser.add_argument(
         "--volumes", "-v", action="store_true", help="Remove associated volumes"
@@ -265,7 +288,11 @@ def create_parser() -> argparse.ArgumentParser:
     pod_inspect = pod_subparsers.add_parser("inspect", help="Inspect a pod")
     pod_inspect.add_argument("pod", help="Pod ID or name")
     pod_inspect.add_argument(
-        "--format", "-f", choices=["json", "yaml"], default="json", help="Output format"
+        "--format",
+        "-f",
+        choices=["json", "yaml"],
+        default="json",
+        help="Output format",
     )
 
     # =========================================================================
@@ -308,7 +335,11 @@ def create_parser() -> argparse.ArgumentParser:
     # =========================================================================
     info_parser = subparsers.add_parser("info", help="Display system information")
     info_parser.add_argument(
-        "--format", "-f", choices=["text", "json"], default="text", help="Output format"
+        "--format",
+        "-f",
+        choices=["text", "json"],
+        default="text",
+        help="Output format",
     )
 
     # =========================================================================
@@ -316,7 +347,11 @@ def create_parser() -> argparse.ArgumentParser:
     # =========================================================================
     version_parser = subparsers.add_parser("version", help="Show version information")
     version_parser.add_argument(
-        "--format", "-f", choices=["text", "json"], default="text", help="Output format"
+        "--format",
+        "-f",
+        choices=["text", "json"],
+        default="text",
+        help="Output format",
     )
 
     # =========================================================================
@@ -462,7 +497,10 @@ def cmd_run(args: argparse.Namespace) -> int:
             print(f"Using image: {rootfs_path}")
             rootfs_path = resolved
         else:
-            print(f"Error: Rootfs or image not found: {args.rootfs}", file=sys.stderr)
+            print(
+                f"Error: Rootfs or image not found: {args.rootfs}",
+                file=sys.stderr,
+            )
             return 1
 
     container = Container()
@@ -809,7 +847,8 @@ def cmd_pod(args: argparse.Namespace) -> int:
                 if pod_filter and not c.pod_id.startswith(pod_filter):
                     continue
                 print(
-                    f"{c.id[:12]:<14} {c.pod_id[:12]:<14} {(c.name or '')[:20]:<20} {c.status}"
+                    f"{c.id[:12]:<14} {c.pod_id[:12]:<14} "
+                    f"{(c.name or '')[:20]:<20} {c.status}"
                 )
         return 0
 
@@ -956,7 +995,7 @@ def cmd_info(args: argparse.Namespace) -> int:
     # Check seccomp
     seccomp_status = "unknown"
     try:
-        with open("/proc/sys/kernel/seccomp/actions_avail", "r") as f:
+        with open("/proc/sys/kernel/seccomp/actions_avail", "r"):
             seccomp_status = "enabled"
     except FileNotFoundError:
         if os.path.exists("/proc/self/seccomp"):
@@ -1017,7 +1056,7 @@ def cmd_version(args: argparse.Namespace) -> int:
 def cmd_cleanup(args: argparse.Namespace) -> int:
     """Handle cleanup command - remove unused resources."""
     from mini_docker.container import Container
-    from mini_docker.image_builder import list_images, remove_image
+    from mini_docker.image_builder import list_images  # noqa: F401
 
     # Confirm unless --force
     if not args.force and not args.all and not args.containers and not args.images:
@@ -1035,7 +1074,6 @@ def cmd_cleanup(args: argparse.Namespace) -> int:
     removed_containers = 0
     removed_images = 0
     removed_volumes = 0
-    reclaimed_space = 0
 
     container = Container()
 
@@ -1052,7 +1090,7 @@ def cmd_cleanup(args: argparse.Namespace) -> int:
 
     # Clean images
     if args.all or args.images:
-        images = list_images()
+        # images = list_images()
         # For now, just report - don't remove images in use
         # In a real implementation, we'd track which images are used
         pass

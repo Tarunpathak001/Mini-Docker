@@ -62,9 +62,8 @@ BPF Filter Structure:
 """
 
 import ctypes
-import os
 import struct
-from typing import List, Set
+from typing import Set
 
 from mini_docker.utils import libc
 
