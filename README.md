@@ -24,10 +24,6 @@ Mini-Docker is an **educational container runtime** that implements the core tec
 
 ▶️ https://asciinema.org/a/myYGnwM9pqxHmb3V
 
-<sub>If the embed doesn’t load, open the link above.</sub>
-
-<script src="https://asciinema.org/a/myYGnwM9pqxHmb3V.js" async></script>
-
 
 This recording demonstrates:
 - PID namespace isolation (container runs as PID 1)
