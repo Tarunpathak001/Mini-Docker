@@ -20,12 +20,27 @@ Mini-Docker is an **educational container runtime** that implements the core tec
 
 ---
 
-## 🎥 Demo
+## 🎬 Live Demo (asciinema)
 
-[Watch Demo Run](examples/demorun.mp4)
+▶️ https://asciinema.org/a/myYGnwM9pqxHmb3V
 
----
+<sub>If the embed doesn’t load, open the link above.</sub>
 
+<script src="https://asciinema.org/a/myYGnwM9pqxHmb3V.js" async></script>
+
+
+This recording demonstrates:
+- PID namespace isolation (container runs as PID 1)
+- UTS namespace separation (isolated hostname)
+- Cgroups v2 PID enforcement (fork bomb protection)
+- Dropped Linux capabilities & seccomp-BPF sandboxing
+
+## Tested On
+
+- OS: Ubuntu 24.04 LTS (Noble)
+- Kernel: Linux 6.x
+- Environment: VirtualBox VM
+- Cgroups: v2
 
 ## ✨ Features
 
